@@ -8,7 +8,9 @@ def getPinStatus():
   return RELAYS
 
 def setPin(pin, value):
-  RELAYS[int(pin)].value(int(value))  
+  #RELAYS[int(pin)].value(int(value))
+  relay = machine.Pin(int(pin),machine.Pin.OUT)
+  relay.value(int(value))
   return "PIN %s set to %s" % (pin, value)
   
 def parseURL(url):
@@ -34,6 +36,8 @@ def buildResponse(response):
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 
 s = socket.socket()
+# allow quick reuse of ip address 
+s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 s.bind(addr)
 s.listen(1)
 
